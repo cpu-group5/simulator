@@ -73,7 +73,7 @@ enum OP decode(decoder *self, uint32_t OP_CODE){
   } else if ((OP_CODE & IJ_MASK) == 0x68000000) {
     printf("%s\n", "op_in");
     return op_in;
-  } else if ((OP_CODE & IJ_MASK) == 0x69000000) {
+  } else if ((OP_CODE & IJ_MASK) == 0x6C000000) {
     printf("%s\n", "op_out");
     return op_out;
   } else if ((OP_CODE & (FL_MASK | 0x00030000)) == 0x45010000) {
