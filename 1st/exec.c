@@ -1,4 +1,5 @@
 #include "stdio.h"
+#include "stdlib.h"
 #include "exec.h"
 #define R_MASK 0xFC00003F
 #define IJ_MASK 0xFC000000
@@ -112,6 +113,8 @@ void exec(simulator *self){
       return;
     case op_out:
       rt = GET_RT(OP);
+      self->print_registers(self);//TODO フィボナッチ用の仮の処理
+      exit (1);
       fwrite(&self->GPR[rt], 4, 1, stdout);
       return;
     case op_bt_s:
