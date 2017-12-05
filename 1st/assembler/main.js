@@ -7,7 +7,7 @@ var PC = 0;
 var byteCode = '';
 
 var lineReaderForLabel = require('readline').createInterface({
-  input: require('fs').createReadStream('fib_edited.s')
+  input: require('fs').createReadStream('double.s')
 });
 
 function processLine(line) {
@@ -20,7 +20,8 @@ function processLine(line) {
     if (instruction === 'jal') {
       byteCode += OPERATIONS[instruction]([(+labels[processedLine[1]]).toString(2)]);
     } else {
-      byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length)));
+      if(OPERATIONS[instruction]===undefined){p(instruction);}else{byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length)));}
+
     }
   }
   PC++;
@@ -75,7 +76,7 @@ lineReaderForLabel.on('line', processLabel);
 
 lineReaderForLabel.on('close', function () {
   var lineReader = require('readline').createInterface({
-    input: require('fs').createReadStream('fib_edited.s')
+    input: require('fs').createReadStream('double.s')
   });
   lineReader.on('line', processLine);
   lineReader.on('close', function () {
