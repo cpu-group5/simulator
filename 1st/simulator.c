@@ -5,6 +5,7 @@
 
 uint32_t *open_TEXT(simulator *self, int argc, char const *argv[]){
   FILE *file_pointer = fopen(argv[1], "r");
+  char debug = argv[2];
   char byte[4];
   uint32_t *TEXT = malloc(1024*1024*2);
   int counter = 0;
@@ -37,6 +38,9 @@ void init(simulator *self,int argc, char const *argv[]){
 
 void run(simulator *self){
   for (; self->PC < 48;) {
+    if(1){
+      self->print_registers(self);
+    }
     self->fetch(self);
     self->OP = self->decoder.decode(&(self->decoder), self->OP_CODE);
     if (self->OP == undefined) {
