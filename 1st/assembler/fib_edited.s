@@ -1,9 +1,18 @@
+.section	".rodata"
+.align	8
+l.432:	! 0.000000
+	0x0
+l.430:	! 1.000000
+	0x3f800000
+.section	".text"
+.global	min_caml_start
 addi %r1, %r0, 20
 sw %r31, 4(%r30)
 addi %r30, %r30, 8
 jal fib.10
 addi %r30, %r30, -8
 lw %r31, 4(%r30)
+#aaa
 sw %r31, 4(%r30)
 addi %r30, %r30, 8
 out %r1
