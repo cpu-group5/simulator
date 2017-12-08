@@ -8,9 +8,8 @@ int main(int argc, char const *argv[]) {
   unsigned char op_binary_buffer[4];
   int i = 0;
   int j = 0;
-  printf("argv[1] is %s\n",argv[1]);
   in_fp = fopen(argv[1], "r");
-  out_fp = fopen("out.dat", "wb");
+  out_fp = fopen(argv[2], "wb");
   while (fread(buffer,sizeof(buffer),1,in_fp)){
     binary_buffer[0] &= 0;
     for (i = 0; i < 8; i++) {

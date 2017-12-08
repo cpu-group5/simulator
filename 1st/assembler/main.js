@@ -28,7 +28,10 @@ function processLine(line) {
       if (instruction === 'jal') {
         byteCode += OPERATIONS[instruction]([(+labels[processedLine[1]]).toString(2)]);
       } else {
-        if(OPERATIONS[instruction]===undefined){p(instruction);}else{byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length)));}
+        if(OPERATIONS[instruction]===undefined){p(instruction);}
+        else{
+          byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length)));
+        }
       }
     }
     PC++;
@@ -50,7 +53,7 @@ function registerLabel(label, PC) {
 function convertLine(argv) {
   argv.forEach(function (arg, index) {
     var numbers;
-    if (!arg.match(/%r/) && arg.match(/[a-z]+/)) {
+    if (!arg.match(/%(r|f)/) && arg.match(/[a-z]+/)) {
       var diff = (+labels[arg]) - PC;
       if (diff < 0) {
         argv[index] = (65536 - diff).toString(2);
@@ -59,10 +62,9 @@ function convertLine(argv) {
       }
     } else if (arg.match(/\d+\(%r\d+\)/)) {
       numbers = (arg.match(/\d+/g));
-
       argv[index] = (+numbers[1]).toString(2);
       argv.push((+numbers[0]).toString(2));
-    } else if (arg.match(/%r\d+/)) {
+    } else if (arg.match(/%(r|f)\d+/)) {
       argv[index] = (+(arg.match(/\d+/))[0]).toString(2);
     } else if (arg.match(/-\d+/)) {
       var complement = (65536 - (+((arg.match(/\d+/))[0]))).toString(2);
@@ -110,6 +112,19 @@ function processLabel(line) {
     lineCountForlabel++;
   }
 }
+function writeData(){
+  data.forEach(function(pair){
+    pair.data.forEach(function(data){
+      byteData += ('0'.repeat(32)+(data).toString(2)).slice(-32);
+    })
+  });
+  require('fs').writeFile(inputFile.replace('.s','') + '_data.dat', byteData, function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  console.log("The file was saved!");
+  });
+}
 function makeData(){
   var lineReader = require('readline').createInterface({
     input: require('fs').createReadStream(inputFile)
@@ -118,7 +133,7 @@ function makeData(){
   lineReader.on('close', makeLabel);
 }
 function makeLabel(){
-  p(data);
+  // p(data);
   var count = 0;
   data.forEach(function(pair){
     registerLabel(pair.label,count);
@@ -137,6 +152,7 @@ function makeText() {
   });
   lineReader.on('line', processLine);
   lineReader.on('close', function () {
+    writeData();
     require('fs').writeFile(inputFile.replace('.s','') + '_text.dat', byteCode, function(err) {
       if(err) {
         return console.log(err);
@@ -146,3 +162,8 @@ function makeText() {
   });
 }
  makeData();
+function cheack32(){
+    if(OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length))).length!==32){
+      p(`${instruction} is wrong`);
+    }
+}

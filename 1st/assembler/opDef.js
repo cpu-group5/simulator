@@ -1,12 +1,41 @@
+var rHeader = '0'.repeat(6);
+function padZero(size, value) {
+  return ('0'.repeat(32) + value).slice(-size);
+}
+function register(a){
+  return rHeader + padZero(5, a[1]) + padZero(5, a[2]) + padZero(5, a[0])  + '0'.repeat(5);
+};
+function shift(a){
+  return rHeader + '0'.repeat(5) + padZero(5, a[1]) + padZero(5, a[0]) + padZero(5, a[2])
+};
+function immediate(a){
+  return padZero(5, a[1]) + padZero(5, a[0]) + padZero(16, a[2]);
+};
+function branch(a){
+  return padZero(5, a[0]) + padZero(5, a[1]) + padZero(16, a[2]);
+};
+
+function f3Register(a){
+  return '010001'+'10000'+padZero(5, a[2]) + padZero(5, a[1]) + padZero(5, a[0]);
+};
+
+function f2Register(a){
+  return '010001'+'10000' + padZero(5, a[1])+'0'.repeat(5) + padZero(5, a[0]);
+};
+
+function cs(a){
+  return '010001'+'10000' + padZero(5, a[2]) + padZero(5, a[1]) + padZero(3, a[0]) + '00' + '11';
+}
+
 module.exports = OPERATIONS = {
   'add': function (a) {
-    return '000000' + padZero(5, a[1]) + padZero(5, a[2]) + padZero(5, a[0]) + '00000100000';
+    return register(a) + '100000';
   },
   'addi': function (a) {
-    return '001000' + padZero(5, a[1]) + padZero(5, a[0]) + padZero(16, a[2]);
+    return '001000' + immediate(a);
   },
   'sub': function (a) {
-    return '000000' + padZero(5, a[1]) + padZero(5, a[2]) + padZero(5, a[0]) + '00000100010';
+    return register(a) + '100010';
   },
   'and': function (a) {
 
@@ -27,30 +56,33 @@ module.exports = OPERATIONS = {
 
   },
   'srl': function (a) {
-    return '00000000000' + padZero(5, a[1]) + padZero(5, a[0]) + padZero(5, a[2]) + '000010';
+    return shift(a) + '000010';
   },
   'slt': function (a) {
-
+    return register(a) + '101010';
   },
   'slti': function (a) {
 
   },
   'beq': function (a) {
-    return '000100' + padZero(5, a[0]) + padZero(5, a[1]) + padZero(16, a[2]);
+    return '000100' + branch(a);
   },
   'bne': function (a) {
-    return '000101' + padZero(5, a[0]) + padZero(5, a[1]) + padZero(16, a[2]);
+    return '000101' + branch(a);
   },
   'j': function (a) {
-
+    return '000010' + padZero(26, a[0]);
   },
   'jal': function (a) {
     return '000011' + padZero(26, a[0]);
   },
   'jr': function (a) {
-    return '000000' + padZero(5, a[0]) + '000000000000000' + '001000';
+    return rHeader + padZero(5, a[0]) + '000000000000000' + '001000';
   },
   'jalr': function (a) {
+
+  },
+  'lui': function (a) {
 
   },
   'lw': function (a) {
@@ -65,58 +97,59 @@ module.exports = OPERATIONS = {
   'out': function (a) {
     return '01101100000' + padZero(5, a[0]) + '0000000000000000';
   },
-  'bt_s': function (a) {
-
+  'bt.s': function (a) {
+    return  '010001' + '01000' + padZero(3, a[0]) + '01'  + padZero(16, a[0]);
   },
-  'bf_s': function (a) {
-
+  'bf.s': function (a) {
+    return  '010001' + '01000' + padZero(3, a[0]) + '00'  + padZero(16, a[0]);
   },
-  'add_s': function (a) {
-
+  'add.s': function (a) {
+    return f3Register(a) + '000000';
   },
-  'sub_s': function (a) {
-
+  'sub.s': function (a) {
+    return f3Register(a) + '000001';
   },
-  'mul_s': function (a) {
-
+  'mul.s': function (a) {
+    return f3Register(a) + '000010'
   },
-  'div_s': function (a) {
-
+  'div.s': function (a) {
+    return f3Register(a) + '000011'
   },
-  'inv_s': function (a) {
-
+  'mov.s': function (a) {
+    return f2Register(a) + '000110'
   },
-  'c_s': function (a) {
-
+  'neg.s': function (a) {
+    return f2Register(a) + '000111'
   },
-  'lw_s': function (a) {
-
+  'abs.s': function (a) {
+    return f2Register(a) + '000101'
   },
-  'sw_s': function (a) {
-
+  'sqrt.s': function (a) {
+    return f2Register(a) + '000100'
   },
-  'lui': function (a) {
-
+  'c.eq.s': function (a) {
+    return cs(a) + '0010'
   },
-  'mov_s': function (a) {
-
+  'c.lt.s': function (a) {
+    return cs(a) + '1100'
   },
-  'neg_s': function (a) {
-
+  'c.le.s': function (a) {
+    return cs(a) + '1110'
+  },
+  'lw.s': function (a) {
+    return '110001' + padZero(5, a[1]) + padZero(5, a[0]) + padZero(16, a[2]);
+  },
+  'sw.s': function (a) {
+    return '111001' + padZero(5, a[1]) + padZero(5, a[0]) + padZero(16, a[2]);
+  },
+  'ftoi': function (a) {
+    return '111000' + padZero(5, a[1]) + padZero(5, a[0]) + '0'.repeat(16);
+  },
+  'itof': function (a) {
+    return '110000' + padZero(5, a[1]) + padZero(5, a[0]) + '0'.repeat(16);
+  },
+  'la': function (a) {
+    return '001111'+ '00000' + padZero(5, a[0]) + padZero(32, a[1]).slice(0,16)
+    + '001101' + register([a[0],a[0],padZero(32, a[1]).slice(16,32)]);
   },
 };
-
-function padZero(size, value) {
-  return ('00000000000000000000000000' + value).slice(-size);
-}
-
-function toOpCode(a, CIndex, CSize) {
-  a.forEach(function (binary, index) {
-    if (index !== CIndex) {
-      a[index] = padZero(5, binary);
-    } else {
-      a[index] = padZero(CSize, binary);
-    }
-  });
-  return a.join('');
-}
