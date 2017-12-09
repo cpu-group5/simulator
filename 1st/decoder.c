@@ -12,6 +12,7 @@ void init_decoder(decoder *self){
 enum OP decode(decoder *self, uint32_t OP_CODE){
   if ((OP_CODE & R_MASK) == 0x00000020) {
     printf("%s\n", "op_add");
+    printf("%s\n", "op_add");
     return op_add;
   } else if ((OP_CODE & IJ_MASK) == 0x20000000) {
     printf("%s\n", "op_addi");
@@ -107,12 +108,18 @@ enum OP decode(decoder *self, uint32_t OP_CODE){
   } else if ((OP_CODE & IJ_MASK) == 0x3C000000) {
     printf("%s\n", "op_lui");
     return op_lui;
-  } else if ((OP_CODE & FL_MASK) == 0x46000006) {
+  } else if ((OP_CODE & (FL_MASK | 0x0000003F)) == 0x46000006) {
     printf("%s\n", "op_mov_s");
     return op_mov_s;
-  } else if ((OP_CODE & FL_MASK) == 0x46000007) {
+  } else if ((OP_CODE & (FL_MASK | 0x0000003F)) == 0x46000007) {
     printf("%s\n", "op_neg_s");
     return op_neg_s;
+  } else if ((OP_CODE & IJ_MASK) == 0xD0000000) {
+    printf("%s\n", "op_ftoi");
+    return op_ftoi;
+  } else if ((OP_CODE & IJ_MASK) == 0xC0000000) {
+    printf("%s\n", "op_itof");
+    return op_itof;
   } else{
     printf("%s: %08X", "undefined OP_CODE", OP_CODE);
     return undefined;

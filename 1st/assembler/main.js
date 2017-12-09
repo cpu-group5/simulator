@@ -25,7 +25,6 @@ function processLine(line) {
     }
     if (isLabel(instruction)) {
     } else {
-      if(instruction === 'bf.s'){p('=======');p(processedLine);p(convertLine(processedLine.slice(1, processedLine.length)))}
       if (instruction === 'j'||instruction === 'jal' || instruction === 'la') {
         byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length),true));
       } else {
@@ -36,7 +35,6 @@ function processLine(line) {
       }
       PC++;
       if(instruction === 'la'){
-        p((convertLine(processedLine.slice(1, processedLine.length))));
         PC++;
       }
     }
@@ -133,10 +131,6 @@ function processLabel(line) {
     if (isLabel(instruction)) {
       registerLabel(instruction.substring(0, instruction.length - 1), lineCountForlabel);
     }else {
-      if(lineCountForlabel===34){
-        // p(OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length))));
-        // p(processedLine);
-      }
       lineCountForlabel++;
       if (instruction === 'la') {
         lineCountForlabel++;
@@ -154,7 +148,6 @@ function writeData(){
     if(err) {
       return console.log(err);
     }
-  console.log("The file was saved!");
   });
 }
 function makeData(){
@@ -165,7 +158,6 @@ function makeData(){
   lineReader.on('close', makeLabel);
 }
 function makeLabel(){
-  // p(data);
   var count = 0;
   data.forEach(function(pair){
     registerLabel(pair.label,count);
@@ -189,7 +181,6 @@ function makeText() {
       if(err) {
         return console.log(err);
       }
-    console.log("The file was saved!");
     });
   });
 }

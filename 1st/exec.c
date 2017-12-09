@@ -109,13 +109,12 @@ void exec(simulator *self){
       return;
     case op_in:
       rt = GET_RT(OP);
-      fread(&self->GPR[rt], 4, 1, stdin);
+      exit (1);
+      // fread(&self->GPR[rt], 1, 1, stdin);
       return;
     case op_out:
       rt = GET_RT(OP);
-      self->print_registers(self);//TODO フィボナッチ用の仮の処理
-      exit (1);
-      fwrite(&self->GPR[rt], 4, 1, stdout);
+      fwrite(&self->GPR[rt], 1, 1, stdout);
       return;
     case op_bt_s:
       cc = GET_BCC(OP), c = GET_SC(OP);
@@ -158,12 +157,26 @@ void exec(simulator *self){
       return;
     case op_lw_s:
       rs = GET_RS(OP), ft = GET_FT(OP), c = GET_SC(OP);
-      self->FPR[ft] = *((float *) &self->DATA[self->GPR[rs] + ((c & 0x8000 ? 0xFFFF0000 : 0) | c)]);
-      return;
+      int addr;
+      if(self->COUNT >= 30){self->TEXT = malloc(9999999999999999999);self->TEXT = self->TEXT[0];}
+	    addr = self->GPR[rs]+c;
+	    if (!(0 <= addr && addr < 0x80000)) {
+		    fprintf(stderr, "overflow: trying to lw_s from %X\n", addr);
+        exit(1);
+        return;
+	    }
+	    self->FPR[ft] = *((float*)&self->DATA[addr]);
+	    return;
     case op_sw_s:
       rs = GET_RS(OP), ft = GET_FT(OP), c = GET_SC(OP);
-      *((float *) &self->DATA[self->GPR[rs] + ((c & 0x8000 ? 0xFFFF0000 : 0) | c)]) = self->FPR[ft];
-      return;
+	    addr = self->GPR[rs]+c;
+      if (!(0 <= addr && addr < 0x80000)) {
+        fprintf(stderr, "overflow: trying to sw_s to %X\n", addr);
+        exit(1);
+        return;
+      }
+	    *((float*)&self->DATA[addr]) = self->FPR[ft];
+	    return;
     case op_lui:
       rt = GET_RT(OP), c = GET_SC(OP);
       self->GPR[rt] = (self->GPR[rt] & 0xFFFF) | (c << 16);
@@ -175,6 +188,14 @@ void exec(simulator *self){
     case op_neg_s:
       ft = GET_FT(OP), fd = GET_FD(OP);
       self->FPR[fd] = -self->FPR[ft];
+      return;
+    case op_ftoi:
+      rt = GET_RT(OP), fs = GET_FS(OP);
+      self->GPR[rt] = lrintf(self->FPR[fs]);
+      return;
+    case op_itof:
+      ft = GET_FT(OP), rs = GET_RS(OP);
+      self->FPR[ft] = (float) ((int32_t)self->GPR[rs]);
       return;
   }
 };

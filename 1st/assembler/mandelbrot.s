@@ -28,7 +28,8 @@ iloop.227:
 	addi	%r26, %r0, 0
 	bne	%r1, %r26, beq_else.451
 	addi	%r1, %r0, 1
-	jal	min_caml_print_int
+	out %r1
+	jr	%r31
 beq_else.451:
 	sub.s	%f2, %f2, %f3
 	add.s	%f2, %f2, %f4
@@ -60,7 +61,8 @@ beq_else.451:
 	j	iloop.227
 bt.s_else.452:
 	addi	%r1, %r0, 0
-	jal	min_caml_print_int
+	out %r1
+	jr	%r31
 xloop.217:
 	addi	%r26, %r0, 400
 	slt	%r28, %r26, %r1
@@ -134,6 +136,3 @@ bne_else.455:
 	lw	%r1, 0(%r30)
 	addi	%r1, %r1, 1
 	j	yloop.213
-min_caml_print_int:
-	out	%r1
-	jr	%r31

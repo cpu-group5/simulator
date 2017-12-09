@@ -149,7 +149,6 @@ module.exports = OPERATIONS = {
     return '110000' + padZero(5, a[1]) + padZero(5, a[0]) + '0'.repeat(16);
   },
   'la': function (a) {
-    console.log('001101' + register([a[0],a[0],padZero(32, a[1]).slice(16,32)]));
     return '001111'+ '00000' + padZero(5, a[0]) + padZero(32, a[1]).slice(0,16)
     + '001101' + immediate([a[0],a[0],padZero(32, a[1]).slice(16,32)]);
   },
