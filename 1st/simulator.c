@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <signal.h>
 #include "simulator.h"
 
-uint32_t *open_TEXT(simulator *self, int argc, char const *argv[]){
-  FILE *file_pointer = fopen(argv[1], "r");
-  char debug = argv[2];
+uint32_t *open_FILE(simulator *self,int file,int argc, char const *argv[]){
+  FILE *file_pointer = fopen(argv[file], "r");
   char byte[4];
   uint32_t *TEXT = malloc(1024*1024*2);
   int counter = 0;
@@ -23,25 +21,6 @@ uint32_t *open_TEXT(simulator *self, int argc, char const *argv[]){
   return TEXT;
 }
 
-uint32_t *open_DATA(simulator *self, int argc, char const *argv[]){
-  FILE *file_pointer = fopen(argv[2], "r");
-  char debug = argv[2];
-  char byte[4];
-  uint32_t *DATA = malloc(1024*1024*2);
-  int counter = 0;
-    uint32_t tmp;
-  if (file_pointer == NULL) {
-    fprintf(stderr, "Can't open input file\n");
-    perror("open_DATA");
-    exit(1);
-  }
-  while (fscanf(file_pointer, "%c%c%c%c", &byte[0], &byte[1], &byte[2], &byte[3]) != EOF) {
-    tmp = *(uint32_t *) byte;
-    DATA[counter++] = tmp;
-  }
-  return DATA;
-}
-
 void init(simulator *self,int argc, char const *argv[]){
   decoder decoder;
   init_decoder(&decoder);
@@ -55,8 +34,8 @@ void init(simulator *self,int argc, char const *argv[]){
   self->fetch = fetch;
   self->run = run;
   self->print_registers = print_registers;
-  self->TEXT = open_TEXT(self, argc, argv);
-  self->DATA = open_DATA(self, argc, argv);
+  self->TEXT = open_FILE(self, 1, argc, argv);
+  self->DATA = open_FILE(self, 2, argc, argv);
   self->COUNT = 0;
 };
 
