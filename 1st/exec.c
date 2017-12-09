@@ -63,11 +63,11 @@ void exec(simulator *self){
       return;
     case op_slt:
       rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
-      self->GPR[rd] = self->GPR[rs] < self->GPR[rt];
+      self->GPR[rd] = self->GPR[rs] <= self->GPR[rt];
       return;
     case op_slti:
       rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
-      self->GPR[rt] = self->GPR[rs] < ((c & 0x8000 ? 0xFFFF0000 : 0) | c);
+      self->GPR[rt] = self->GPR[rs] <= ((c & 0x8000 ? 0xFFFF0000 : 0) | c);
       return;
     case op_beq:
       rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
@@ -158,7 +158,6 @@ void exec(simulator *self){
     case op_lw_s:
       rs = GET_RS(OP), ft = GET_FT(OP), c = GET_SC(OP);
       int addr;
-      if(self->COUNT >= 30){self->TEXT = malloc(9999999999999999999);self->TEXT = self->TEXT[0];}
 	    addr = self->GPR[rs]+c;
 	    if (!(0 <= addr && addr < 0x80000)) {
 		    fprintf(stderr, "overflow: trying to lw_s from %X\n", addr);
@@ -179,7 +178,7 @@ void exec(simulator *self){
 	    return;
     case op_lui:
       rt = GET_RT(OP), c = GET_SC(OP);
-      self->GPR[rt] = (self->GPR[rt] & 0xFFFF) | (c << 16);
+      self->GPR[rt] = ((uint32_t)c) << 16;
       return;
     case op_mov_s:
       ft = GET_FT(OP), fd = GET_FD(OP);
