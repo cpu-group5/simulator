@@ -25,16 +25,21 @@ function processLine(line) {
     }
     if (isLabel(instruction)) {
     } else {
-      if (instruction === 'jal') {
-        byteCode += OPERATIONS[instruction]([(+labels[processedLine[1]]).toString(2)]);
+      if(instruction === 'bf.s'){p('=======');p(processedLine);p(convertLine(processedLine.slice(1, processedLine.length)))}
+      if (instruction === 'j'||instruction === 'jal' || instruction === 'la') {
+        byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length),true));
       } else {
         if(OPERATIONS[instruction]===undefined){p(instruction);}
         else{
           byteCode += OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length)));
         }
       }
+      PC++;
+      if(instruction === 'la'){
+        p((convertLine(processedLine.slice(1, processedLine.length))));
+        PC++;
+      }
     }
-    PC++;
   }
 }
 
@@ -50,9 +55,28 @@ function registerLabel(label, PC) {
   labels[label] = PC;
 }
 
-function convertLine(argv) {
+function convertLine(argv,direct) {
+  var numbers;
+  if(direct){
+    argv.forEach(function (arg, index) {
+      if (!arg.match(/%(r|f)/) && arg.match(/[a-z]+/)) {
+        argv[index] = (+labels[arg]).toString(2);
+      } else if (arg.match(/\d+\(%r\d+\)/)) {
+        numbers = (arg.match(/\d+/g));
+        argv[index] = (+numbers[1]).toString(2);
+        argv.push((+numbers[0]).toString(2));
+      } else if (arg.match(/%(r|f)\d+/)) {
+        argv[index] = (+(arg.match(/\d+/))[0]).toString(2);
+      } else if (arg.match(/-\d+/)) {
+        var complement = (65536 - (+((arg.match(/\d+/))[0]))).toString(2);
+        argv[index] = complement;
+      } else if (arg.match(/\d+/)) {
+        argv[index] = (+(arg.match(/\d+/))[0]).toString(2);
+      }
+    });
+    }
+  else{
   argv.forEach(function (arg, index) {
-    var numbers;
     if (!arg.match(/%(r|f)/) && arg.match(/[a-z]+/)) {
       var diff = (+labels[arg]) - PC;
       if (diff < 0) {
@@ -73,7 +97,7 @@ function convertLine(argv) {
       argv[index] = (+(arg.match(/\d+/))[0]).toString(2);
     }
 
-  });
+  });}
   return argv;
 }
 function processData(line){
@@ -108,8 +132,16 @@ function processLabel(line) {
     }
     if (isLabel(instruction)) {
       registerLabel(instruction.substring(0, instruction.length - 1), lineCountForlabel);
+    }else {
+      if(lineCountForlabel===34){
+        // p(OPERATIONS[instruction](convertLine(processedLine.slice(1, processedLine.length))));
+        // p(processedLine);
+      }
+      lineCountForlabel++;
+      if (instruction === 'la') {
+        lineCountForlabel++;
+      }
     }
-    lineCountForlabel++;
   }
 }
 function writeData(){
@@ -153,7 +185,7 @@ function makeText() {
   lineReader.on('line', processLine);
   lineReader.on('close', function () {
     writeData();
-    require('fs').writeFile(inputFile.replace('.s','') + '_text.dat', byteCode, function(err) {
+    require('fs').writeFile(inputFile.replace('.s','') + '_text.dat', byteCode+'1'.repeat(32), function(err) {
       if(err) {
         return console.log(err);
       }

@@ -98,10 +98,10 @@ module.exports = OPERATIONS = {
     return '01101100000' + padZero(5, a[0]) + '0000000000000000';
   },
   'bt.s': function (a) {
-    return  '010001' + '01000' + padZero(3, a[0]) + '01'  + padZero(16, a[0]);
+    return  '010001' + '01000' + padZero(3, a[0]) + '01'  + padZero(16, a[1]);
   },
   'bf.s': function (a) {
-    return  '010001' + '01000' + padZero(3, a[0]) + '00'  + padZero(16, a[0]);
+    return  '010001' + '01000' + padZero(3, a[0]) + '00'  + padZero(16, a[1]);
   },
   'add.s': function (a) {
     return f3Register(a) + '000000';
@@ -149,7 +149,8 @@ module.exports = OPERATIONS = {
     return '110000' + padZero(5, a[1]) + padZero(5, a[0]) + '0'.repeat(16);
   },
   'la': function (a) {
+    console.log('001101' + register([a[0],a[0],padZero(32, a[1]).slice(16,32)]));
     return '001111'+ '00000' + padZero(5, a[0]) + padZero(32, a[1]).slice(0,16)
-    + '001101' + register([a[0],a[0],padZero(32, a[1]).slice(16,32)]);
+    + '001101' + immediate([a[0],a[0],padZero(32, a[1]).slice(16,32)]);
   },
 };
