@@ -14,7 +14,8 @@ typedef struct simulator{
   uint32_t OP; // operation code
   uint32_t *TEXT;
   uint32_t *DATA;
-  uint32_t COUNT;
+  unsigned long long COUNT;
+  FILE *IFILE;
   unsigned char FPCC; // floating point compare code
   decoder decoder;
   void (*init)(struct simulator *self, int argc, char const *argv[]);

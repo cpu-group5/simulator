@@ -64,11 +64,11 @@ void exec(simulator *self){
       return;
     case op_slt:
       rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
-      self->GPR[rd] = self->GPR[rs] <= self->GPR[rt];
+      self->GPR[rd] = (int32_t)self->GPR[rs] <= (int32_t)self->GPR[rt];
       return;
     case op_slti:
       rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
-      self->GPR[rt] = self->GPR[rs] <= ((c & 0x8000 ? 0xFFFF0000 : 0) | c);
+      self->GPR[rt] = (int32_t)self->GPR[rs] <= (int32_t)c;
       return;
     case op_beq:
       rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
@@ -110,11 +110,16 @@ void exec(simulator *self){
       return;
     case op_in:
       rt = GET_RT(OP);
-      exit (1);
-      // fread(&self->GPR[rt], 1, 1, stdin);
+    	int inp;
+      inp = getc(self->IFILE);
+      if (inp == EOF) {
+        exit (1);
+      }
+      *((unsigned char*)&self->GPR[rt]) = (unsigned char) inp;
       return;
     case op_out:
       rt = GET_RT(OP);
+      // fprintf(stderr, "out is: %8X\n", self->GPR[rt]);
       fwrite(&self->GPR[rt], 1, 1, stdout);
       return;
     case op_bt_s:
@@ -188,6 +193,14 @@ void exec(simulator *self){
     case op_neg_s:
       ft = GET_FT(OP), fd = GET_FD(OP);
       self->FPR[fd] = -self->FPR[ft];
+      return;
+    case op_abs_s:
+      ft = GET_FT(OP), fd = GET_FD(OP);
+      self->FPR[fd] = (self->FPR[ft] < 0) ? -self->FPR[ft] : self->FPR[ft];
+      return;
+    case op_sqrt_s:
+      ft = GET_FT(OP), fd = GET_FD(OP);
+      self->FPR[fd] = (float)sqrt((double)self->FPR[ft]);
       return;
     case op_ftoi:
       rt = GET_RT(OP), fs = GET_FS(OP);

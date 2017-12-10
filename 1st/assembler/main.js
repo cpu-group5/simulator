@@ -8,12 +8,13 @@ var data = [];
 var PC = 0;
 var byteCode = '';
 var byteData = '';
+var pclist = '';
 var InLabelSection = false;
 var InTextSection = false;
 var InDataSection = false;
 
 function processLine(line) {
-  var processedLine = line.replace(/^\s+/,'').replace(/,/g, '').split(/\s/);
+  var processedLine = line.replace(/^\s+/,'').replace(/,/g, '').split(/\s+/);
   var instruction = processedLine[0];
   if(instruction === '.global'){
     InTextSection = true;
@@ -23,6 +24,7 @@ function processLine(line) {
     if (isComment(instruction)) {
       return;
     }
+    pclist += ('0'.repeat(32) + (PC).toString(10)).slice(-4)+' '+('0'.repeat(32) + (PC*4).toString(16)).slice(-7) + ' ' + line + '\n';
     if (isLabel(instruction)) {
     } else {
       if (instruction === 'j'||instruction === 'jal' || instruction === 'la') {
@@ -99,7 +101,7 @@ function convertLine(argv,direct) {
   return argv;
 }
 function processData(line){
-  var processedLine = line.replace(/^\s+/,'').replace(/,/g, '').split(/\s/);
+  var processedLine = line.replace(/^\s+/,'').replace(/,/g, '').split(/\s+/);
   var token = processedLine[0];
   if(token === '.align'){
     InDataSection = true;
@@ -112,13 +114,13 @@ function processData(line){
       token = token.slice(0, token.length - 1);
       data.push({label: token, data:[]});
     } else {
-      data[data.length-1].data.push(+token);
+      data[data.length-1].data.push(token);
     }
   }
   return 0;
 }
 function processLabel(line) {
-  var processedLine = line.replace(/^\s+/,'').replace(/,/g, '').split(/\s/);
+  var processedLine = line.replace(/^\s+/,'').replace(/,/g, '').split(/\s+/);
   var instruction = processedLine[0];
   if(instruction === '.global'){
     InLabelSection = true;
@@ -141,7 +143,11 @@ function processLabel(line) {
 function writeData(){
   data.forEach(function(pair){
     pair.data.forEach(function(data){
-      byteData += ('0'.repeat(32)+(data).toString(2)).slice(-32);
+      if(data === '0x'+(+data).toString(16)){
+        byteData += ('0'.repeat(32)+(+data).toString(2)).slice(-32);
+      } else {
+        byteData += ('0'.repeat(32)+(labels[data]).toString(2)).slice(-32);
+      }
     })
   });
   require('fs').writeFile(inputFile.replace('.s','') + '_data.dat', byteData, function(err) {
@@ -170,13 +176,17 @@ function makeLabel(){
   lineReaderForLabel.on('close',makeText);
 }
 function makeText() {
-  p(labels);
   var lineReader = require('readline').createInterface({
     input: require('fs').createReadStream(inputFile)
   });
   lineReader.on('line', processLine);
   lineReader.on('close', function () {
     writeData();
+    require('fs').writeFile('pclist_' + inputFile.replace('.s','') + '.log', pclist, function(err) {
+      if(err) {
+        return console.log(err);
+      }
+    });
     require('fs').writeFile(inputFile.replace('.s','') + '_text.dat', byteCode+'1'.repeat(32), function(err) {
       if(err) {
         return console.log(err);

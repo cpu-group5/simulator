@@ -44,16 +44,16 @@ module.exports = OPERATIONS = {
 
   },
   'or': function (a) {
-
+    return register(a) + '100101';
   },
   'ori': function (a) {
-
+    return '001101' + immediate(a);
   },
   'nor': function (a) {
 
   },
   'sll': function (a) {
-
+    return shift(a) + '000000';
   },
   'srl': function (a) {
     return shift(a) + '000010';
@@ -62,7 +62,7 @@ module.exports = OPERATIONS = {
     return register(a) + '101010';
   },
   'slti': function (a) {
-
+    return '001010' + immediate(a);
   },
   'beq': function (a) {
     return '000100' + branch(a);
@@ -80,10 +80,10 @@ module.exports = OPERATIONS = {
     return rHeader + padZero(5, a[0]) + '000000000000000' + '001000';
   },
   'jalr': function (a) {
-
+    return rHeader + padZero(5, a[0]) + '000000000000000' + '001001';
   },
   'lui': function (a) {
-
+    return '001111' + '00000' + padZero(5, a[0]) + padZero(16, a[1]);
   },
   'lw': function (a) {
     return '100011' + padZero(5, a[1]) + padZero(5, a[0]) + padZero(16, a[2]);

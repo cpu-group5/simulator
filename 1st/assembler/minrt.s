@@ -206,7 +206,7 @@ const_array.6364:	! array
 const_array.6365:	! array
 	0x437f0000
 const_array.6366:	! array
-	0x7fffffffffffffff
+	0xffffffff
 const_array.6367:	! array
 	const_array.6366
 	const_array.6366
