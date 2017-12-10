@@ -2,6 +2,7 @@
 LBLUE='\033[1;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+make clean
 make
 # sudo gdb --args ./simulator assembler/minrt_text.bin ./assembler/minrt_data.bin ./minrt_ifile.bin
 ./simulator assembler/minrt_text.bin ./assembler/minrt_data.bin ./minrt_ifile.bin > minrt_result.ppm

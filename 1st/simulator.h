@@ -5,6 +5,7 @@
 #include "decoder.h"
 #define GPR_SIZE 32
 #define FPR_SIZE 32
+#define BREAKPOINTS_SIZE 65536
 
 typedef struct simulator{
   uint32_t GPR[GPR_SIZE]; // general purpose register
@@ -17,16 +18,23 @@ typedef struct simulator{
   unsigned long long COUNT;
   FILE *IFILE;
   unsigned char FPCC; // floating point compare code
+  int is_debug;
+  int breakpoints[BREAKPOINTS_SIZE];
+  char command[256];
   decoder decoder;
   void (*init)(struct simulator *self, int argc, char const *argv[]);
   void (*fetch)(struct simulator *self);
   void (*exec)(struct simulator *self);
   void (*run)(struct simulator *self);
+  void (*debug)(struct simulator *self);
   void (*print_registers)(struct simulator *self);
+  void (*print_breakpoints)(int breakpoints[]);
 } simulator;
 void init(simulator *self,int argc, char const *argv[]);
 void fetch(simulator *self);
 void run(simulator *self);
+void debug(simulator *self);
 void print_registers(simulator *self);
+void print_breakpoints(int breakpoints[]);
 
 #endif
