@@ -98,6 +98,7 @@ void exec(simulator *self){
     	int inp;
       inp = getc(self->IFILE);
       if (inp == EOF) {
+        fprintf(stderr, "finished");  
         exit (1);
       }
       *((unsigned char*)&self->GPR[rt]) = (unsigned char) inp;
