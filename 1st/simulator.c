@@ -3,6 +3,7 @@
 #include "simulator.h"
 
 uint32_t *open_FILE(simulator *self,int file,int argc, char const *argv[]){
+  fprintf(stderr, "open %s\n",argv[file]);
   FILE *file_pointer = fopen(argv[file], "r");
   char byte[4];
   uint32_t *TEXT = malloc(1024*1024*2);
