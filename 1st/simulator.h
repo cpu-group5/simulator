@@ -1,6 +1,8 @@
 #ifndef __SIMULATOR_H__
 #define __SIMULATOR_H__
 
+
+#include <string.h>
 #include <stdint.h>
 #include "decoder.h"
 #define GPR_SIZE 32

@@ -14,6 +14,9 @@ void debug(simulator *self){
         case '\n':
           self->print_breakpoints(self->breakpoints);
           break;
+        case 'c':
+          memset(self->breakpoints, 0, sizeof(int)*BREAKPOINTS_SIZE);
+          break;
         case ' ':
           self->breakpoints[(int)strtol(&self->command[2], NULL, 0)] = 1;
           break;
@@ -33,3 +36,12 @@ void debug(simulator *self){
   }
   return;
 }
+
+
+void print_breakpoints(int breakpoints[]) {
+  int i;
+  for (i = 0; i < BREAKPOINTS_SIZE; i++) {
+    if(breakpoints[i]){fprintf(stderr,"%d\n",i);}
+  }
+  return;
+};
