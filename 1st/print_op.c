@@ -1,148 +1,168 @@
-void prnt_add(void) {
-	fprintf(stderr, "%d\tadd\t%%r%d, %%r%d, %%r%d\n", PC, rd, rs, rt);
-	return;
-}
-void prnt_addi(void) {
-	fprintf(stderr, "%d\taddi\t%%r%d, %%r%d, %d\n", PC, rt, rs, c);
-	return;
-}
-void prnt_sub(void) {
-	fprintf(stderr, "%d\tsub\t%%r%d, %%r%d, %%r%d\n", PC, rd, rs, rt);
-	return;
-}
-void prnt_and(void) {
-	fprintf(stderr, "%d\tand\t%%r%d, %%r%d, %%r%d\n", PC, rd, rs, rt);
-	return;
-}
-void prnt_andi(void) {
-	fprintf(stderr, "%d\tandi\t%%r%d, %%r%d, %d\n", PC, rt, rs, c);
-	return;
-}
-void prnt_or(void) {
-	fprintf(stderr, "%d\tor\t%%r%d, %%r%d, %%r%d\n", PC, rd, rs, rt);
-	return;
-}
-void prnt_ori(void) {
-	fprintf(stderr, "%d\tori\t%%r%d, %%r%d, %d\n", PC, rt, rs, c);
-	return;
-}
-void prnt_nor(void) {
-	fprintf(stderr, "%d\tnor\t%%r%d, %%r%d, %%r%d\n", PC, rd, rs, rt);
-	return;
-}
-void prnt_sll(void) {
-	fprintf(stderr, "%d\tsll\t%%r%d, %%r%d, %d\n", PC, rd, rt, c);
-	return;
-}
-void prnt_srl(void) {
-	fprintf(stderr, "%d\tsrl\t%%r%d, %%r%d, %d\n", PC, rd, rt, c);
-	return;
-}
-void prnt_slt(void) {
-	fprintf(stderr, "%d\tslt\t%%r%d, %%r%d, %%r%d\n", PC, rd, rs, rt);
-	return;
-}
-void prnt_slti(void) {
-	fprintf(stderr, "%d\tslti\t%%r%d, %%r%d, %d\n", PC, rt, rs, c);
-	return;
-}
-void prnt_beq(void) {
-	fprintf(stderr, "%d\tbeq\t%%r%d, %%r%d, %d\n", PC, rs, rt, c);
-	return;
-}
-void prnt_bne(void) {
-	fprintf(stderr, "%d\tbne\t%%r%d, %%r%d, %d\n", PC, rs, rt, c);
-	return;
-}
-void prnt_j(void) {
-	fprintf(stderr, "%d\tj\t%d\n", PC, c);
-	return;
-}
-void prnt_jal(void) {
-	fprintf(stderr, "%d\tjal\t%d\n", PC, c);
-	return;
-}
-void prnt_jr(void) {
-	fprintf(stderr, "%d\tjr\t%%r%d\n", PC, rs);
-	return;
-}
-void prnt_jalr(void) {
-	fprintf(stderr, "%d\tjalr\t%%r%d\n", PC, rs);
-	return;
-}
-void prnt_lw(void) {
-	fprintf(stderr, "%d\tlw\t%%r%d, %d(%%r%d)\n", PC, rt, c, rs);
-	return;
-}
-void prnt_lui(void) {
-	fprintf(stderr, "%d\tlui\t%%r%d, %d\n", PC, rt, c);
-	return;
-}
-void prnt_sw(void) {
-	fprintf(stderr, "%d\tsw\t%%r%d, %d(%%r%d)\n", PC, rt, c, rs);
-	return;
-}
-void prnt_in(void) {
-	fprintf(stderr, "%d\tin\t%%r%d\n", PC, rt);
-	return;
-}
-void prnt_out(void) {
-	fprintf(stderr, "%d\tout\t%%r%d\n", PC, rt);
-	return;
-}
-void prnt_bt_s(void) {
-	fprintf(stderr, "%d\tbt.s\t%d, %d\n", PC, cc, c);
-	return;
-}
-void prnt_bf_s(void) {
-	fprintf(stderr, "%d\tbf.s\t%d, %d\n", PC, cc, c);
-	return;
-}
-void prnt_add_s(void) {
-	fprintf(stderr, "%d\tadd.s\t%%f%d, %%f%d, %%f%d\n", PC, fd, fs, ft);
-	return;
-}
-void prnt_sub_s(void) {
-	fprintf(stderr, "%d\tsub.s\t%%f%d, %%f%d, %%f%d\n", PC, fd, fs, ft);
-	return;
-}
-void prnt_mul_s(void) {
-	fprintf(stderr, "%d\tmul.s\t%%f%d, %%f%d, %%f%d\n", PC, fd, fs, ft);
-	return;
-}
-void prnt_div_s(void) {
-	fprintf(stderr, "%d\tdiv.s\t%%f%d, %%f%d, %%f%d\n", PC, fd, fs, ft);
-	return;
-}
-void prnt_mov_s(void) {
-	fprintf(stderr, "%d\tmov.s\t%%f%d, %%f%d\n", PC, fd, ft);
-	return;
-}
-void prnt_neg_s(void) {
-	fprintf(stderr, "%d\tneg.s\t%%f%d, %%f%d\n", PC, fd, ft);
-	return;
-}
-void prnt_abs_s(void) {
-	fprintf(stderr, "%d\tabs.s\t%%f%d, %%f%d\n", PC, fd, ft);
-	return;
-}
-void prnt_sqrt_s(void) {
-	fprintf(stderr, "%d\tsqrt.s\t%%f%d, %%f%d\n", PC, fd, ft);
-	return;
-}
-void prnt_lw_s(void) {
-	fprintf(stderr, "%d\tlw.s\t%%f%d, %d(%%r%d)\n", PC, ft, c, rs);
-	return;
-}
-void prnt_sw_s(void) {
-	fprintf(stderr, "%d\tsw.s\t%%f%d, %d(%%r%d)\n", PC, ft, c, rs);
-	return;
-}
-void prnt_ftoi(void) {
-	fprintf(stderr, "%d\tftoi\t%%r%d, %%f%d\n", PC, rt, fs);
-	return;
-}
-void prnt_itof(void) {
-	fprintf(stderr, "%d\titof\t%%f%d, %%r%d\n", PC, ft, rs);
-	return;
+#include "stdio.h"
+#include "stdlib.h"
+#include "simulator.h"
+void print_op(simulator *self){
+    int rs,rt,rd,c,cc,ft,fs,fd,cond,OP;
+    OP = self->OP_CODE;
+    switch (self->OP) {
+      case op_add:
+          rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
+        	fprintf(stderr, "add\t%%r%d, %%r%d, %%r%d\n", rd, rs, rt);
+      	  return;
+      case op_addi:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "addi\t%%r%d, %%r%d, %d\n", rt, rs, c);
+      	  return;
+      case op_sub:
+          rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
+        	fprintf(stderr, "sub\t%%r%d, %%r%d, %%r%d\n", rd, rs, rt);
+      	  return;
+      case op_and:
+          rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
+        	fprintf(stderr, "and\t%%r%d, %%r%d, %%r%d\n", rd, rs, rt);
+      	  return;
+      case op_andi:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "andi\t%%r%d, %%r%d, %d\n", rt, rs, c);
+      	  return;
+      case op_or:
+          rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
+        	fprintf(stderr, "or\t%%r%d, %%r%d, %%r%d\n", rd, rs, rt);
+      	  return;
+      case op_ori:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "ori\t%%r%d, %%r%d, %d\n", rt, rs, c);
+      	  return;
+      case op_nor:
+          rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
+        	fprintf(stderr, "nor\t%%r%d, %%r%d, %%r%d\n", rd, rs, rt);
+      	  return;
+      case op_sll:
+          rt = GET_RT(OP), rd = GET_RD(OP), c = GET_SSC(OP);
+        	fprintf(stderr, "sll\t%%r%d, %%r%d, %d\n", rd, rt, c);
+      	  return;
+      case op_srl:
+          rt = GET_RT(OP), rd = GET_RD(OP), c = GET_SSC(OP);
+        	fprintf(stderr, "srl\t%%r%d, %%r%d, %d\n", rd, rt, c);
+      	  return;
+      case op_slt:
+          rs = GET_RS(OP), rt = GET_RT(OP), rd = GET_RD(OP);
+        	fprintf(stderr, "slt\t%%r%d, %%r%d, %%r%d\n", rd, rs, rt);
+      	  return;
+      case op_slti:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "slti\t%%r%d, %%r%d, %d\n", rt, rs, c);
+      	  return;
+      case op_beq:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "beq\t%%r%d, %%r%d, %d\n", rs, rt, c);
+      	  return;
+      case op_bne:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "bne\t%%r%d, %%r%d, %d\n", rs, rt, c);
+      	  return;
+      case op_j:
+          c = GET_LC(OP);
+        	fprintf(stderr, "j\t%d\n", c);
+      	  return;
+      case op_jal:
+          c = GET_LC(OP);
+        	fprintf(stderr, "jal\t%d\n", c);
+      	  return;
+      case op_jr:
+          rs = GET_RS(OP);
+        	fprintf(stderr, "jr\t%%r%d\n", rs);
+      	  return;
+      case op_jalr:
+          rs = GET_RS(OP);
+        	fprintf(stderr, "jalr\t%%r%d\n", rs);
+      	  return;
+      case op_lw:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "lw\t%%r%d, %d(%%r%d)\n", rt, c, rs);
+      	  return;
+      case op_sw:
+          rs = GET_RS(OP), rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "sw\t%%r%d, %d(%%r%d)\n", rt, c, rs);
+      	  return;
+      case op_in:
+          rt = GET_RT(OP);
+        	fprintf(stderr, "in\t%%r%d\n", rt);
+      	  return;
+      case op_out:
+          rt = GET_RT(OP);
+        	fprintf(stderr, "out\t%%r%d\n", rt);
+      	  return;
+      case op_bt_s:
+          cc = GET_BCC(OP), c = GET_SC(OP);
+        	fprintf(stderr, "bt.s\t%d, %d\n", cc, c);
+      	  return;
+      case op_bf_s:
+          cc = GET_BCC(OP), c = GET_SC(OP);
+        	fprintf(stderr, "bf.s\t%d, %d\n", cc, c);
+      	  return;
+      case op_add_s:
+          ft = GET_FT(OP), fs = GET_FS(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "add.s\t%%f%d, %%f%d, %%f%d\n", fd, fs, ft);
+      	  return;
+      case op_sub_s:
+          ft = GET_FT(OP), fs = GET_FS(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "sub.s\t%%f%d, %%f%d, %%f%d\n", fd, fs, ft);
+      	  return;
+      case op_mul_s:
+          ft = GET_FT(OP), fs = GET_FS(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "mul.s\t%%f%d, %%f%d, %%f%d\n", fd, fs, ft);
+      	  return;
+      case op_div_s:
+          ft = GET_FT(OP), fs = GET_FS(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "div.s\t%%f%d, %%f%d, %%f%d\n", fd, fs, ft);
+      	  return;
+      case op_c_s:
+          ft = GET_FT(OP), fs = GET_FS(OP), cc = GET_CCC(OP), cond = GET_COND(OP);
+          self->FPCC |= 1 << cc;
+          if (cond == 2) {
+          	fprintf(stderr, "c.eq.s\t%d, %%f%d, %%f%d\n", cc, fs, ft);
+          } else if (cond == 12) {
+          	fprintf(stderr, "c.lt.s\t%d, %%f%d, %%f%d\n", cc, fs, ft);
+          } else if (cond == 14) {
+          	fprintf(stderr, "c.le.s\t%d, %%f%d, %%f%d\n", cc, fs, ft);
+          }
+        return;
+      case op_lw_s:
+          rs = GET_RS(OP), ft = GET_FT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "lw.s\t%%f%d, %d(%%r%d)\n", ft, c, rs);
+      	  return;
+      case op_sw_s:
+          rs = GET_RS(OP), ft = GET_FT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "sw.s\t%%f%d, %d(%%r%d)\n", ft, c, rs);
+      	  return;
+      case op_lui:
+          rt = GET_RT(OP), c = GET_SC(OP);
+        	fprintf(stderr, "lui\t%%r%d, %d\n", rt, c);
+      	  return;
+      case op_mov_s:
+          ft = GET_FT(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "mov.s\t%%f%d, %%f%d\n", fd, ft);
+      	  return;
+      case op_neg_s:
+          ft = GET_FT(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "neg.s\t%%f%d, %%f%d\n", fd, ft);
+      	  return;
+      case op_abs_s:
+          ft = GET_FT(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "abs.s\t%%f%d, %%f%d\n", fd, ft);
+      	  return;
+      case op_sqrt_s:
+          ft = GET_FT(OP), fd = GET_FD(OP);
+        	fprintf(stderr, "sqrt.s\t%%f%d, %%f%d\n", fd, ft);
+      	  return;
+      case op_ftoi:
+          rt = GET_RT(OP), fs = GET_FS(OP);
+        	fprintf(stderr, "ftoi\t%%r%d, %%f%d\n", rt, fs);
+      	  return;
+      case op_itof:
+          ft = GET_FT(OP), rs = GET_RS(OP);
+        	fprintf(stderr, "itof\t%%f%d, %%r%d\n", ft, rs);
+      	  return;
+    }
 }

@@ -2,21 +2,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "simulator.h"
-#define R_MASK 0xFC00003F
-#define IJ_MASK 0xFC000000
-#define FL_MASK 0xFFE00000
-#define GET_RS(x) ((0x03E00000 & (x)) >> 21)
-#define GET_RT(x) ((0x001F0000 & (x)) >> 16)
-#define GET_RD(x) ((0x0000F800 & (x)) >> 11)
-#define GET_LC(x) (0x03FFFFFF & (x))
-#define GET_SC(x) (0x0000FFFF & (x))
-#define GET_SSC(x) ((0x000007C0 & (x)) >> 6)
-#define GET_BCC(x) ((0x001C0000 & (x)) >> 18)
-#define GET_FT(x) ((0x001F0000 & (x)) >> 16)
-#define GET_FS(x) ((0x0000F800 & (x)) >> 11)
-#define GET_FD(x) ((0x000007C0 & (x)) >> 6)
-#define GET_CCC(x) ((0x00000700) & (x) >> 8)
-#define GET_COND(x) (0x0000000F & (x))
 
 void exec(simulator *self){
   int rs,rt,rd,c,cc,ft,fs,fd,cond,OP;
