@@ -33,6 +33,7 @@ void init(simulator *self,int argc, char const *argv[]){
   self->is_debug = 1;
   self->decoder = decoder;
   self->fetch = fetch;
+  self->exec = exec;
   self->run = run;
   self->debug = debug;
   memset(self->breakpoints, 0, sizeof(int)*BREAKPOINTS_SIZE);
@@ -46,14 +47,14 @@ void init(simulator *self,int argc, char const *argv[]){
 
 void run(simulator *self){
   fprintf(stderr,"simulator running\n");
-  for (; ;) {
+  while (1) {
     self->debug(self);
     self->fetch(self);
     self->OP = self->decoder.decode(&(self->decoder), self->OP_CODE);
     if(self->COUNT %1000000000 == 1){
       self->print_registers(self);
     }
-    self->print_registers(self);
+    // self->print_registers(self);
     // if(self->COUNT == stop){
     // self->TEXT = malloc(99999999999);
     // self->TEXT = self->TEXT[99999999999];
@@ -68,7 +69,7 @@ void run(simulator *self){
 };
 void debug(simulator *self){
   while (self->is_debug||self->breakpoints[self->PC-1]) {
-    fprintf(stderr,"(type h for help)$");
+    fprintf(stderr,"(type h to list commands)$");
     fgets(self->command, 256, stdin);
     switch (self->command[0]) {
       case '\n':

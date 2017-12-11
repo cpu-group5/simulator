@@ -1,7 +1,7 @@
 #include <math.h>
 #include "stdio.h"
 #include "stdlib.h"
-#include "exec.h"
+#include "simulator.h"
 #define R_MASK 0xFC00003F
 #define IJ_MASK 0xFC000000
 #define FL_MASK 0xFFE00000
