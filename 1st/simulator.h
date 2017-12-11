@@ -33,10 +33,10 @@ typedef struct simulator{
 void init(simulator *self,int argc, char const *argv[]);
 void fetch(simulator *self);
 void run(simulator *self);
-void debug(simulator *self);
 void print_registers(simulator *self);
 void print_breakpoints(int breakpoints[]);
 void exec(simulator *self);
+void debug(simulator *self);
 
 
 #endif
