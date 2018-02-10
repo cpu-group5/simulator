@@ -98,7 +98,8 @@ void exec(simulator *self){
     	int inp;
       inp = getc(self->IFILE);
       if (inp == EOF) {
-        fprintf(stderr, "finished");  
+        fprintf(stderr, "finish\n");
+        fprintf(stderr,"executed OPs: %llu\n", self->COUNT-1);
         exit (1);
       }
       *((unsigned char*)&self->GPR[rt]) = (unsigned char) inp;
